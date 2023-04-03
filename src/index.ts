@@ -8,7 +8,7 @@ app.get('/', (req: Request, res: Response) => {
 });
 
 app.get('/hi', (req: Request, res: Response) => {
-    res.send('HIIiiii');
+    res.send('HIIiiii9999999');
 });
 
 app.listen(PORT, () => console.log(`server is listening on port: ${PORT}`));

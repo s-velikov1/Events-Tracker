@@ -1,7 +1,6 @@
 import express, { Application } from "express";
 import AccountsRouter from "./routes/accounts";
 
-
 export default class Server {
     public app: Application;
     private PORT;

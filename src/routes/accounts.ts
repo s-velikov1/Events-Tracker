@@ -1,23 +1,28 @@
 import { Router, Request, Response } from "express";
-import {
-    createAccount,
-    deleteAccountById,
-    getAccountById,
-    getAllAccounts,
-    updateAccountById
-} from "../controllers/accounts";
+import AccountsController from "../controllers/accounts";
 
-export const accountRoutes = Router();
+export default class AccountsRouter {
+    public router: Router;
+    private controller: AccountsController;
 
-accountRoutes
-    .route('/')
-    .get(getAllAccounts)
-    .post(createAccount)
-;
+    constructor() {
+        this.router = Router();
+        this.controller = new AccountsController();
+        this.routes();
+    };
 
-accountRoutes
-    .route('/:id')
-    .get(getAccountById)
-    .put(updateAccountById)
-    .delete(deleteAccountById)
-;
+    private routes(): void {
+        this.router
+            .route('/')
+            .get(this.controller.getAllAccounts)
+            .post(this.controller.createAccount)
+        ;
+
+        this.router
+            .route('/:id')
+            .get(this.controller.getAccountById)
+            .put(this.controller.updateAccountById)
+            .delete(this.controller.deleteAccountById)
+        ;
+    }
+}

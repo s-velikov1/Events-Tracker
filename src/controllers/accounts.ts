@@ -1,16 +1,16 @@
 import { Request, Response } from "express";
-import Model from "../models/Model";
+import Account from "../models/Account";
 import db from "../db/dbConnection";
+import { body, validationResult } from 'express-validator';
+import IAccount from "../types/IAccount";
 
 export default class AccountsController {
     public async getAllAccounts(req: Request, res: Response):Promise<void> {
         // console.log('enter get all accounts');
         
-        const model = new Model(db, 'accounts');
-        db.connect();
+        const model = new Account(db);
         
         let accounts = await model.findAll();
-        db.disconnect();
         // console.log(model);
         console.log(accounts);
         
@@ -18,12 +18,26 @@ export default class AccountsController {
     };
 
     public async createAccount(req: Request, res: Response):Promise<void> {
-        const model = new Model(db, 'accounts');
-        db.connect();
-        console.log(req.body);
-        db.disconnect();
-        
-        res.send('this is createAccount controller response');
+        try {
+            await body('name').notEmpty().withMessage('Name is required').run(req);
+            await body('email').notEmpty().withMessage('Email is required').isEmail().withMessage('Invalid email').run(req);
+            await body('password').notEmpty().withMessage('Password is required').run(req);
+
+            const errors = validationResult(req);
+
+            if (!errors.isEmpty()) {
+                res.status(400).json({ errors: errors.array() });
+            }
+
+            const account = new Account(db);
+            console.log(req.body as IAccount);
+            
+            account.create(req.body as IAccount); // TODO: Create interface for account req.body
+            
+            res.send('this is createAccount controller response');
+        } catch (err) {
+            
+        }
     };
 
     public async deleteAccountById(req: Request, res: Response):Promise<void> {

@@ -1,4 +1,4 @@
-import PostgresDatabase from "../db/PostgresDatabase";
+import PostgresPool from "../db/PostgresPool";
 import Model from "./Model";
 
 interface User {
@@ -9,9 +9,7 @@ interface User {
 };
 
 export default class AccountModel extends Model {
-    constructor(db: PostgresDatabase) {
+    constructor(db: PostgresPool) {
         super(db, 'accounts');
     };
-
-
 }

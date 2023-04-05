@@ -1,5 +1,6 @@
 import { Router, Request, Response } from "express";
 import AccountsController from "../controllers/accounts";
+import { body, validationResult } from 'express-validator';
 
 export default class AccountsRouter {
     public router: Router;
@@ -14,7 +15,7 @@ export default class AccountsRouter {
     private routes(): void {
         this.router
             .route('/register')
-            // .get(this.controller.getAllAccounts)
+            .get(this.controller.getAllAccounts)
             .post(this.controller.createAccount)
         ;
 

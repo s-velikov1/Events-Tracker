@@ -19,7 +19,7 @@ export default class Server {
 
     private routes():void {
         const accountsRouter = new AccountsRouter();
-        this.app.use('/accounts', accountsRouter.router);
+        this.app.use('/api/v1/auth', accountsRouter.router);
     };
 
     public start(): void {

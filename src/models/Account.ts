@@ -13,5 +13,5 @@ export default class AccountModel extends Model {
         super(db, 'accounts');
     };
 
-    
+
 }

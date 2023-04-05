@@ -18,7 +18,10 @@ export default class AccountsController {
     };
 
     public async createAccount(req: Request, res: Response):Promise<void> {
+        const model = new Model(db, 'accounts');
+        db.connect();
         console.log(req.body);
+        db.disconnect();
         
         res.send('this is createAccount controller response');
     };

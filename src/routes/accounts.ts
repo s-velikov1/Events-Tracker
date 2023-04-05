@@ -13,16 +13,20 @@ export default class AccountsRouter {
 
     private routes(): void {
         this.router
-            .route('/')
-            .get(this.controller.getAllAccounts)
+            .route('/register')
+            // .get(this.controller.getAllAccounts)
             .post(this.controller.createAccount)
         ;
 
         this.router
-            .route('/:id')
-            .get(this.controller.getAccountById)
-            .put(this.controller.updateAccountById)
-            .delete(this.controller.deleteAccountById)
-        ;
+            .route('/login')
+            // .post(loginMethod) TODO: login
+
+        // this.router
+        //     .route('/:id')
+        //     .get(this.controller.getAccountById)
+        //     .put(this.controller.updateAccountById)
+        //     .delete(this.controller.deleteAccountById)
+        // ;
     }
 }

@@ -1,8 +1,9 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import Account from "../models/Account";
 import db from "../db/dbConnection";
 import { body, validationResult } from 'express-validator';
 import IAccount from "../types/IAccount";
+import passport from 'passport';
 
 export default class AccountsController {
     public async getAllAccounts(req: Request, res: Response):Promise<void> {
@@ -13,7 +14,7 @@ export default class AccountsController {
         res.json(accounts);
     };
 
-    public async createAccount(req: Request, res: Response):Promise<void> {
+    public async createAccount(req: Request, res: Response, next: NextFunction):Promise<void | Response> {
         try {
             await body('name').notEmpty().withMessage('Name is required').run(req);
             await body('email').notEmpty().withMessage('Email is required').isEmail().withMessage('Invalid email').run(req);
@@ -22,15 +23,29 @@ export default class AccountsController {
             const errors = validationResult(req);
 
             if (!errors.isEmpty()) {
-                res.status(400).json({ errors: errors.array() });
+                return res.status(400).json({ errors: errors.array() });
             }
 
+            
             const account = new Account(db);
-            console.log(req.body as IAccount);
+
+            const existedAccount = await account.findByEmail(req.body.email);
+
+            if (existedAccount) {
+                return res.status(409).json({
+                    status: 'error',
+                    message: 'User with this email already exist'
+                });
+            }
+
+            console.log(req.body, 'body');
             
-            account.create(req.body as IAccount);
+            const newAccount = await account.create(req.body as IAccount);
             
-            res.send('this is createAccount controller response');
+            return res.status(201).json({
+                status: 'success',
+                data: newAccount
+            });
         } catch (err) {
             res.status(500).json({
                 status: 'error',
@@ -38,6 +53,34 @@ export default class AccountsController {
             })
         }
     };
+
+    public async loginAccount(req: Request, res: Response, next: NextFunction): Promise<void> {
+        console.log('loginAccount start');
+        
+        passport.authenticate('local', (err: any, user: any, info: any) => {
+            if (err) {
+                return next();
+            }
+
+            if (!user) {
+                return res.status(401).json({
+                    status: 'error',
+                    message: 'Invalid email or password'
+                });
+            }
+
+            req.logIn(user, (err) => {
+                if (err) {
+                    return next();
+                }
+
+                return res.status(200).json({
+                    status: 'success',
+                    message: 'Logged in successfully'
+                });
+            })
+        })(req, res, next);
+    }
 
     public async deleteAccountById(req: Request, res: Response):Promise<void> {
         res.send('this is deleteAccount controller response');

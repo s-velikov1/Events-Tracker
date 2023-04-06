@@ -21,7 +21,8 @@ export default class AccountsRouter {
 
         this.router
             .route('/login')
-            // .post(loginMethod) TODO: login
+            .post(this.controller.loginAccount)
+        ;
 
         // this.router
         //     .route('/:id')

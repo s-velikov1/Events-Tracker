@@ -6,13 +6,9 @@ import IAccount from "../types/IAccount";
 
 export default class AccountsController {
     public async getAllAccounts(req: Request, res: Response):Promise<void> {
-        // console.log('enter get all accounts');
+        const account = new Account(db);
         
-        const model = new Account(db);
-        
-        let accounts = await model.findAll();
-        // console.log(model);
-        console.log(accounts);
+        let accounts = await account.findAll();
         
         res.json(accounts);
     };
@@ -32,11 +28,14 @@ export default class AccountsController {
             const account = new Account(db);
             console.log(req.body as IAccount);
             
-            account.create(req.body as IAccount); // TODO: Create interface for account req.body
+            account.create(req.body as IAccount);
             
             res.send('this is createAccount controller response');
         } catch (err) {
-            
+            res.status(500).json({
+                status: 'error',
+                message: 'Can not create account'
+            })
         }
     };
 

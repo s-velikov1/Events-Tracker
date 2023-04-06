@@ -1,6 +1,11 @@
 import express, { Application } from "express";
 import AccountsRouter from "./routes/accounts";
 
+import session from 'express-session';
+import passport from 'passport';
+import localStrategy from 'passport-local';
+import bcrypt from 'bcrypt';
+
 export default class Server {
     public app: Application;
     private PORT;
@@ -15,6 +20,11 @@ export default class Server {
     private config(): void {
         this.app.use(express.json());
         this.app.use(express.urlencoded({ extended: false }));
+        this.app.use(session({
+            secret: 'bigSecret',
+            resave: false,
+            saveUninitialized: true
+        })); // TODO: move secret to .env file
     };
 
     private routes():void {

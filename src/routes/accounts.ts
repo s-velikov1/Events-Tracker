@@ -1,6 +1,6 @@
-import { Router, Request, Response } from "express";
+import { Router } from "express";
 import AccountsController from "../controllers/accounts";
-import { body, validationResult } from 'express-validator';
+import Auth from "../middlewares/auth";
 
 export default class AccountsRouter {
     public router: Router;
@@ -21,14 +21,12 @@ export default class AccountsRouter {
 
         this.router
             .route('/login')
-            .post(this.controller.loginAccount)
+            .post(Auth.loginAccount)
         ;
 
-        // this.router
-        //     .route('/:id')
-        //     .get(this.controller.getAccountById)
-        //     .put(this.controller.updateAccountById)
-        //     .delete(this.controller.deleteAccountById)
-        // ;
+        this.router
+            .route('/logout')
+            .get(Auth.logoutAccount)
+        ;
     }
 }

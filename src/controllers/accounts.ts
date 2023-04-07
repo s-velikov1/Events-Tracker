@@ -54,32 +54,43 @@ export default class AccountsController {
         }
     };
 
-    public async loginAccount(req: Request, res: Response, next: NextFunction): Promise<void> {
-        console.log('loginAccount start');
+    // public async loginAccount(req: Request, res: Response, next: NextFunction): Promise<void> {
+    //     console.log('loginAccount start');
         
-        passport.authenticate('local', (err: any, user: any, info: any) => {
+    //     passport.authenticate('local', (err: any, user: any, info: any) => {
+    //         if (err) {
+    //             return next();
+    //         }
+
+    //         if (!user) {
+    //             return res.status(401).json({
+    //                 status: 'error',
+    //                 message: 'Invalid email or password'
+    //             });
+    //         }
+
+    //         req.logIn(user, (err) => {
+    //             if (err) {
+    //                 return next();
+    //             }
+
+    //             return res.status(200).json({
+    //                 status: 'success',
+    //                 message: 'Logged in successfully'
+    //             });
+    //         })
+    //     })(req, res, next);
+    // };
+
+    public async logout(req: Request, res: Response, next: NextFunction): Promise<any> {
+        await req.logout((err) => {
             if (err) {
-                return next();
+                return next(err);
             }
 
-            if (!user) {
-                return res.status(401).json({
-                    status: 'error',
-                    message: 'Invalid email or password'
-                });
-            }
-
-            req.logIn(user, (err) => {
-                if (err) {
-                    return next();
-                }
-
-                return res.status(200).json({
-                    status: 'success',
-                    message: 'Logged in successfully'
-                });
-            })
-        })(req, res, next);
+            // res.redirect('/');
+        });
+        res.send('you are logged out now')
     }
 
     public async deleteAccountById(req: Request, res: Response):Promise<void> {

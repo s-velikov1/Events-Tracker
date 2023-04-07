@@ -1,4 +1,4 @@
-import express, { Application } from "express";
+import express, { Application, NextFunction, Request, Response } from "express";
 import AccountsRouter from "./routes/accounts";
 import AccountModel from "./models/Account";
 import db from "./db/dbConnection";
@@ -6,6 +6,7 @@ import db from "./db/dbConnection";
 import session from 'express-session';
 import passport from 'passport';
 import { Strategy as LocalStrategy } from 'passport-local';
+import Auth from "./middlewares/auth";
 
 export default class Server {
     public app: Application;
@@ -18,8 +19,8 @@ export default class Server {
         this.accountModel = new AccountModel(db);
         this.PORT = 3000;
         this.config();
-        this.routes();
         this.passportConfig();
+        this.routes();
     }
 
     private config(): void {
@@ -35,6 +36,9 @@ export default class Server {
     private routes():void {
         const accountsRouter = new AccountsRouter();
         this.app.use('/api/v1/auth', accountsRouter.router);
+        this.app.get('/', Auth.isLoggedIn, (req: Request,res: Response) => {
+            res.send('home page');
+        });
     };
 
     private passportConfig():void {
@@ -42,12 +46,12 @@ export default class Server {
             usernameField: 'email',
             passwordField: 'password'
         }, async (email, password, done) => {
-            const userAccount = this.accountModel.findByEmail(email);
+            const userAccount = await this.accountModel.findByEmail(email);
             if (!userAccount) {
                 return done(null, false);
             }
 
-            const passwordMatches = this.accountModel.checkPassword(email, password);
+            const passwordMatches = await this.accountModel.checkPassword(email, password);
             if (!passwordMatches) {
                 return done(null, false);
             }
@@ -60,7 +64,7 @@ export default class Server {
         });
 
         passport.deserializeUser(async (id: any, done) => {
-            const account = this.accountModel.findById(id);
+            const account = await this.accountModel.findById(id);
             done(null, account);
         });
 

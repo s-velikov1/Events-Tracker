@@ -1,13 +1,11 @@
 import { NextFunction, Request, Response } from "express";
 import Account from "../models/Account";
-import db from "../db/dbConnection";
 import { body, validationResult } from 'express-validator';
 import IAccount from "../types/IAccount";
-import passport from 'passport';
 
 export default class AccountsController {
     public async getAllAccounts(req: Request, res: Response):Promise<void> {
-        const account = new Account(db);
+        const account = new Account();
         
         let accounts = await account.findAll();
         
@@ -27,7 +25,7 @@ export default class AccountsController {
             }
 
             
-            const account = new Account(db);
+            const account = new Account();
 
             const existedAccount = await account.findByEmail(req.body.email);
 

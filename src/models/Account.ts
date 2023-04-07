@@ -1,11 +1,10 @@
-import PostgresPool from "../db/PostgresPool";
 import IAccount from "../types/IAccount";
 import Model from "./Model";
 import bcrypt from 'bcrypt';
 
 export default class AccountModel extends Model {
-    constructor(db: PostgresPool) {
-        super(db, 'accounts');
+    constructor() {
+        super('accounts');
     };
 
     public async create(data: IAccount): Promise<any> {

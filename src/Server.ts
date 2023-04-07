@@ -1,7 +1,6 @@
 import express, { Application, NextFunction, Request, Response } from "express";
 import AccountsRouter from "./routes/accounts";
 import AccountModel from "./models/Account";
-import db from "./db/dbConnection";
 
 import session from 'express-session';
 import passport from 'passport';
@@ -16,7 +15,7 @@ export default class Server {
 
     constructor() {
         this.app = express();
-        this.accountModel = new AccountModel(db);
+        this.accountModel = new AccountModel();
         this.PORT = 3000;
         this.config();
         this.passportConfig();

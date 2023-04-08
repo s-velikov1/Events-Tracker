@@ -16,7 +16,7 @@ export default class Server {
     constructor() {
         this.app = express();
         this.accountModel = new AccountModel();
-        this.PORT = 3000;
+        this.PORT = 3001;
         this.config();
         this.passportConfig();
         this.routes();

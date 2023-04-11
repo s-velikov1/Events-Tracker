@@ -4,8 +4,13 @@ import AccountModel from "./models/Account";
 
 import session from 'express-session';
 import passport from 'passport';
-import { Strategy as LocalStrategy } from 'passport-local';
+import passportLocal from 'passport-local';
 import Auth from "./middlewares/auth";
+import cors from 'cors';
+import cookieSession from 'cookie-session';
+import cookieParser from "cookie-parser";
+
+const LocalStrategy = passportLocal.Strategy;
 
 export default class Server {
     public app: Application;
@@ -25,37 +30,63 @@ export default class Server {
     private config(): void {
         this.app.use(express.json());
         this.app.use(express.urlencoded({ extended: false }));
+        this.app.use(cors({
+            origin: 'http://localhost:3000',
+            credentials: true
+        }));
         this.app.use(session({
-            secret: 'bigSecret',
+            secret: 'mysecret',
             resave: false,
-            saveUninitialized: true
+            saveUninitialized: false,
+            // cookie: {
+            //     sameSite: 'none',
+            //     secure: true,
+            //     httpOnly: true
+            // }
         })); // TODO: move secret to .env file
+        // this.app.use(cookieParser('bigSecret'));
     };
 
-    private routes():void {
+    private routes(): void {
         const accountsRouter = new AccountsRouter();
-        this.app.use('/api/v1/auth', accountsRouter.router);
-        this.app.get('/', Auth.isLoggedIn, (req: Request,res: Response) => {
+        this.app.get('/', Auth.isLoggedIn, (req: Request, res: Response) => {
             res.send('home page');
         });
+        this.app.use('/api/v1/auth', accountsRouter.router);
+        this.app.get('/user', (req, res) => {
+            console.log(req.user);
+            res.json({
+                message: 'here should be your user',
+                data: {
+                    user: req.user
+                }
+            })
+        })
     };
 
-    private passportConfig():void {
-        passport.use(new LocalStrategy({
-            usernameField: 'email',
-            passwordField: 'password'
-        }, async (email, password, done) => {
-            const userAccount = await this.accountModel.findByEmail(email);
-            if (!userAccount) {
-                return done(null, false);
-            }
+    private passportConfig(): void {
+        this.app.use(passport.initialize());
+        this.app.use(passport.session());
 
-            const passwordMatches = await this.accountModel.checkPassword(email, password);
-            if (!passwordMatches) {
-                return done(null, false);
-            }
+        passport.use(new LocalStrategy(async (email, password, done) => {
+            try {
+                console.log(email, password, ' from new localstrategy');
+                
+                const userAccount = await this.accountModel.findByEmail(email);
+                if (!userAccount) {
+                    return done(null, false);
+                }
 
-            return done(null, userAccount);
+                const passwordMatches = await this.accountModel.checkPassword(email, password);
+                if (!passwordMatches) {
+                    return done(null, false);
+                }
+
+                return done(null, userAccount);
+            } catch (err) {
+                console.error('new LocalStrategy error: ', err);
+                
+            }
         }));
 
         passport.serializeUser((user: any, done) => {
@@ -63,12 +94,14 @@ export default class Server {
         });
 
         passport.deserializeUser(async (id: any, done) => {
-            const account = await this.accountModel.findById(id);
-            done(null, account);
+            try {
+                const account = await this.accountModel.findById(id);
+                done(null, account);
+            } catch (err) {
+                console.error('deserialize error: ', err);
+                
+            }
         });
-
-        this.app.use(passport.initialize());
-        this.app.use(passport.session());
     };
 
     public start(): void {

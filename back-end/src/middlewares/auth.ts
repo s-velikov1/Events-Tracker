@@ -2,10 +2,10 @@ import passport from "passport";
 import { Request, Response, NextFunction } from "express";
 
 export default class Auth {
-    public static async loginAccount(req: Request, res: Response, next: NextFunction): Promise<void> {
-        console.log('loginAccount start');
-        
+    public static loginAccount(req: Request, res: Response, next: NextFunction) {
         passport.authenticate('local', (err: any, user: any, info: any) => {
+            console.log('=====', user, info);
+            
             if (err) {
                 return next();
             }
@@ -21,13 +21,14 @@ export default class Auth {
                 if (err) {
                     return next();
                 }
-
+                console.log(req.user);
+                
                 return res.status(200).json({
                     status: 'success',
                     message: 'Logged in successfully'
                 });
             })
-        })(req, res, next);
+        })(req, res, next);        
     };
     
     public static async logoutAccount(req: Request, res: Response, next: NextFunction): Promise<any> {

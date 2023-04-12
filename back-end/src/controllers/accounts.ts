@@ -3,10 +3,10 @@ import Account from "../models/Account";
 import { body, validationResult } from 'express-validator';
 import IAccount from "../types/IAccount";
 
+const account = new Account();
+
 export default class AccountsController {
     public async getAllAccounts(req: Request, res: Response):Promise<void> {
-        const account = new Account();
-        
         let accounts = await account.findAll();
         
         res.json(accounts);
@@ -23,10 +23,7 @@ export default class AccountsController {
             if (!errors.isEmpty()) {
                 return res.status(400).json({ errors: errors.array() });
             }
-
             
-            const account = new Account();
-
             const existedAccount = await account.findByEmail(req.body.email);
 
             if (existedAccount) {
@@ -35,8 +32,6 @@ export default class AccountsController {
                     message: 'User with this email already exist'
                 });
             }
-
-            console.log(req.body, 'body');
             
             const newAccount = await account.create(req.body as IAccount);
             
@@ -47,7 +42,7 @@ export default class AccountsController {
         } catch (err) {
             res.status(500).json({
                 status: 'error',
-                message: 'Can not create account'
+                message: 'Can not create account: ' + err
             })
         }
     };

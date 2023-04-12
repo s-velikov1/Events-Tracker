@@ -14,6 +14,7 @@ const pool: Pool = new Pool({
 });
 
 const db = new PostgresPool(pool);
+db.initTables();
 
 process.on('exit', async () => {
     console.log('Database pool is shutting down...');

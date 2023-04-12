@@ -1,6 +1,8 @@
 import { Router } from "express";
 import AccountsController from "../controllers/accounts";
 import Auth from "../middlewares/auth";
+import passport from "passport";
+import { Request, Response } from "express";
 
 export default class AccountsRouter {
     public router: Router;
@@ -21,7 +23,15 @@ export default class AccountsRouter {
 
         this.router
             .route('/login')
-            .post(Auth.loginAccount)
+            .post(passport.authenticate('local'), (req: Request, res: Response) => {
+                res.status(200).json({
+                    error: false,
+                    message: 'you are logged in now',
+                    data: {
+                        user: req.user
+                    }
+                });
+            })
         ;
 
         this.router

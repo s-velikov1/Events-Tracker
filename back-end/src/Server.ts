@@ -4,13 +4,9 @@ import AccountModel from "./models/Account";
 
 import session from 'express-session';
 import passport from 'passport';
-import passportLocal from 'passport-local';
+import { Strategy as LocalStrategy} from 'passport-local';
 import Auth from "./middlewares/auth";
 import cors from 'cors';
-import cookieSession from 'cookie-session';
-import cookieParser from "cookie-parser";
-
-const LocalStrategy = passportLocal.Strategy;
 
 export default class Server {
     public app: Application;
@@ -38,13 +34,7 @@ export default class Server {
             secret: 'mysecret',
             resave: false,
             saveUninitialized: false,
-            // cookie: {
-            //     sameSite: 'none',
-            //     secure: true,
-            //     httpOnly: true
-            // }
         })); // TODO: move secret to .env file
-        // this.app.use(cookieParser('bigSecret'));
     };
 
     private routes(): void {
@@ -54,7 +44,6 @@ export default class Server {
         });
         this.app.use('/api/v1/auth', accountsRouter.router);
         this.app.get('/user', (req, res) => {
-            console.log(req.user);
             res.json({
                 message: 'here should be your user',
                 data: {
@@ -70,8 +59,6 @@ export default class Server {
 
         passport.use(new LocalStrategy(async (email, password, done) => {
             try {
-                console.log(email, password, ' from new localstrategy');
-                
                 const userAccount = await this.accountModel.findByEmail(email);
                 if (!userAccount) {
                     return done(null, false);

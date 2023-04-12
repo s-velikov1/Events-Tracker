@@ -24,19 +24,12 @@ export default class AccountsRouter {
         this.router
             .route('/login')
             .post(passport.authenticate('local'), (req: Request, res: Response) => {
-                if (req.user) {
-                    return res.status(200).json({
-                        error: false,
-                        message: 'you are logged in now',
-                        data: {
-                            user: req.user
-                        }
-                    });
-                }
-
-                return res.status(400).json({
-                    error: true,
-                    message: 'incorrect mail or password ',
+                res.status(200).json({
+                    error: false,
+                    message: 'you are logged in now',
+                    data: {
+                        user: req.user
+                    }
                 });
             })
         ;

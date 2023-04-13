@@ -1,5 +1,5 @@
-import IAccount from "../types/IAccount";
-import Model from "./Model";
+import IAccount from "@mytypes/IAccount";
+import Model from "@models/Model";
 import bcrypt from 'bcrypt';
 
 export default class AccountModel extends Model {

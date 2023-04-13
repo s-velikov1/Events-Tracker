@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
-import Account from "../models/Account";
 import { body, validationResult } from 'express-validator';
-import IAccount from "../types/IAccount";
+import Account from "@models/Account";
+import IAccount from "@mytypes/IAccount";
 
 const account = new Account();
 

@@ -1,4 +1,4 @@
-import PostgresPool from "./PostgresPool";
+import PostgresPool from "@db/PostgresPool";
 import { Pool } from 'pg';
 
 const pool: Pool = new Pool({

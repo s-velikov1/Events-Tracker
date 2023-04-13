@@ -1,6 +1,6 @@
 import { Router } from "express";
-import AccountsController from "../controllers/accounts";
-import Auth from "../middlewares/auth";
+import AccountsController from "@controllers/accounts";
+import Auth from "@middlewares/auth";
 import passport from "passport";
 import { Request, Response } from "express";
 
@@ -32,6 +32,11 @@ export default class AccountsRouter {
                     }
                 });
             })
+            // .post((req: Request, res: Response) => {
+            //     console.log(req.body);
+                
+            //     res.send('login')
+            // })
         ;
 
         this.router

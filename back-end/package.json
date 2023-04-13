@@ -21,6 +21,14 @@
     "url": "https://github.com/s-velikov1/Events-Tracker/issues"
   },
   "homepage": "https://github.com/s-velikov1/Events-Tracker#readme",
+  "_moduleAliases": {
+    "@controllers": "dist/controllers",
+    "@db": "dist/db",
+    "@middlewares": "dist/middlewares",
+    "@models": "dist/models",
+    "@routes": "dist/routes",
+    "@mytypes": "dist/types"
+  },
   "dependencies": {
     "@types/bcrypt": "^5.0.0",
     "@types/cors": "^2.8.13",
@@ -30,7 +38,7 @@
     "@types/passport-local": "^1.0.35",
     "@types/pg": "^8.6.6",
     "bcrypt": "^5.1.0",
-    "concurrently": "^8.0.1",    
+    "concurrently": "^8.0.1",
     "cors": "^2.8.5",
     "express": "^4.18.2",
     "express-session": "^1.17.3",
@@ -43,6 +51,7 @@
   },
   "devDependencies": {
     "@types/express-session": "^1.17.7",
+    "module-alias": "^2.2.2",
     "nodemon": "^2.0.22"
   }
 }

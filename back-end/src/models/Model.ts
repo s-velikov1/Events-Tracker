@@ -1,5 +1,5 @@
-import PostgresPool from "../db/PostgresPool";
-import db from "../db/dbConnection";
+import PostgresPool from "@db/PostgresPool";
+import db from "@db/dbConnection";
 
 export default abstract class Model {
     protected db: PostgresPool;

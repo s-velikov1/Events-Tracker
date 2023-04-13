@@ -1,11 +1,11 @@
-import express, { Application, NextFunction, Request, Response } from "express";
-import AccountsRouter from "./routes/accounts";
-import AccountModel from "./models/Account";
+import express, { Application, Request, Response } from "express";
+import AccountsRouter from "@routes/accounts";
+import AccountModel from "@models/Account";
+import Auth from "@middlewares/auth";
 
 import session from 'express-session';
 import passport from 'passport';
 import { Strategy as LocalStrategy} from 'passport-local';
-import Auth from "./middlewares/auth";
 import cors from 'cors';
 
 export default class Server {
@@ -57,7 +57,10 @@ export default class Server {
         this.app.use(passport.initialize());
         this.app.use(passport.session());
 
-        passport.use(new LocalStrategy(async (email, password, done) => {
+        passport.use(new LocalStrategy({
+            usernameField: 'email',
+            passwordField: 'password'
+        }, async (email, password, done) => {
             try {
                 const userAccount = await this.accountModel.findByEmail(email);
                 if (!userAccount) {

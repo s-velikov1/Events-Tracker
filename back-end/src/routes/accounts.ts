@@ -32,11 +32,6 @@ export default class AccountsRouter {
                     }
                 });
             })
-            // .post((req: Request, res: Response) => {
-            //     console.log(req.body);
-                
-            //     res.send('login')
-            // })
         ;
 
         this.router

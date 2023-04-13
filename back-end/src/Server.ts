@@ -1,11 +1,11 @@
-import express, { Application, NextFunction, Request, Response } from "express";
-import AccountsRouter from "./routes/accounts";
+import express, { Application, Request, Response } from "express";
+import AccountsRouter from "@routes/accounts";
 import AccountModel from "@models/Account";
+import Auth from "@middlewares/auth";
 
 import session from 'express-session';
 import passport from 'passport';
 import { Strategy as LocalStrategy} from 'passport-local';
-import Auth from "@middlewares/auth";
 import cors from 'cors';
 
 export default class Server {

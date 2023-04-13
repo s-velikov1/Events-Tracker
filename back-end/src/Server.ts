@@ -5,12 +5,13 @@ import Auth from "@middlewares/auth";
 
 import session from 'express-session';
 import passport from 'passport';
-import { Strategy as LocalStrategy} from 'passport-local';
+import { Strategy as LocalStrategy } from 'passport-local';
 import cors from 'cors';
 
 export default class Server {
     public app: Application;
     private PORT;
+    private serverInstance: any;
 
     private accountModel: AccountModel;
 
@@ -50,7 +51,8 @@ export default class Server {
                     user: req.user
                 }
             })
-        })
+        });
+        // this.app.use('api/v1/contacts');
     };
 
     private passportConfig(): void {
@@ -75,7 +77,7 @@ export default class Server {
                 return done(null, userAccount);
             } catch (err) {
                 console.error('new LocalStrategy error: ', err);
-                
+
             }
         }));
 
@@ -89,12 +91,36 @@ export default class Server {
                 done(null, account);
             } catch (err) {
                 console.error('deserialize error: ', err);
-                
+
             }
         });
     };
 
     public start(): void {
-        this.app.listen(this.PORT, () => { console.log(`Server is listening on port: ${this.PORT}`) })
+        this.serverInstance = this.app.listen(this.PORT, () => {
+            console.log(`Server is listening on port: ${this.PORT}`)
+        });
+
+        process.on('SIGTERM', () => {
+            console.log('Closing server...');
+            this.serverInstance.close(() => {
+                console.log('Server closed');
+                process.exit(0);
+            });
+        });
+
+        process.on('SIGINT', () => {
+            console.log('Closing server...');
+            this.serverInstance.close(() => {
+                console.log('Server closed');
+                process.exit(0);
+            });
+        });
     };
+
+    public stop(): void {
+        this.serverInstance.close(() => {
+            console.log('Server has been stopped!');
+        })
+    }
 }

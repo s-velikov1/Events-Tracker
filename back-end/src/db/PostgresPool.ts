@@ -39,12 +39,13 @@ export default class PostgresPool {
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )`;
 
-        const createEventParticipantsTable = `CREATE TABLE IF NOT EXISTS event_participants (
+        const createEventParticipantsTable = `CREATE TABLE IF NOT EXISTS contacts (
             id SERIAL PRIMARY KEY,
             first_name TEXT NOT NULL,
             last_name TEXT NOT NULL,
             email TEXT NOT NULL UNIQUE,
-            phone_number TEXT NOT NULL
+            phone_number TEXT NOT NULL,
+            account_id INTEGER REFERENCES accounts(id)
         )`;
 
         const createEventsTable = `CREATE TABLE IF NOT EXISTS events (
@@ -53,8 +54,7 @@ export default class PostgresPool {
             description TEXT NOT NULL,
             start_date TIMESTAMP NOT NULL,
             end_date TIMESTAMP NOT NULL,
-            account_id INTEGER REFERENCES accounts(id),
-            participant_id INTEGER REFERENCES event_participants(id)
+            contact_id INTEGER REFERENCES contacts(id)
         )`;
 
         try {

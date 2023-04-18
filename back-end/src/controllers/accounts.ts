@@ -43,7 +43,7 @@ export default class AccountsController {
             res.status(500).json({
                 status: 'error',
                 message: 'Can not create account: ' + err
-            })
+            });
         }
     };
 

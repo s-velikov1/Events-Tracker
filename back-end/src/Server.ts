@@ -80,7 +80,6 @@ export default class Server {
                 return done(null, userAccount);
             } catch (err) {
                 console.error('new LocalStrategy error: ', err);
-
             }
         }));
 

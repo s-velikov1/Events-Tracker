@@ -7,6 +7,7 @@ const event = new Event();
 
 export default class EventsController {
     public async getEventsByContactId(req: Request, res: Response):Promise<void> {
+        // TODO: Change current logic to return only events for specific contact id
         let events = await event.findAll();
         
         res.json({

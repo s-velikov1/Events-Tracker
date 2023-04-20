@@ -1,28 +1,25 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { AppContext } from "../App";
 import axios from "axios";
 
 export const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [user, setUser] = useState({});
+    const { user, setUser } = useContext(AppContext);
 
     const url: string = process.env.REACT_APP_BACK_END_BASE_URL || '';
 
     const login = () => {
         axios.post('http://localhost:3001/api/v1/auth/login',
         {
-            username: email,
+            email,
             password
         }, { 
             withCredentials: true
         }).then((res) => {
             console.log(res.data.data);
             const user = res.data.data.user;
-            setUser({
-                id: user?.id,
-                email: user?.email,
-                password: user?.password
-            })
+            setUser(user);
         }).catch((err) => {
             console.log(err);
             

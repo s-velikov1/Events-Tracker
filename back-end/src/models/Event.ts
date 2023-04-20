@@ -36,5 +36,18 @@ export default class Event extends Model {
         } catch (err) {
             console.error('isTimeAvailable method error: ', err);
         }
-    }
+    };
+
+    public async findByContactId(contactId: number): Promise<any> {
+        try {
+            const query = `SELECT * FROM ${this.table}
+                WHERE contact_id = $1
+            `;
+            const result = await this.db.query(query, [contactId]);
+
+            return result;
+        } catch (err) {
+            console.error('Event model, findByContactId method error: ', err);
+        }
+    };
 }

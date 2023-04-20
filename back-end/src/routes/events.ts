@@ -14,8 +14,12 @@ export default class ContactsRouter {
     private routes() {
         this.router
             .route('/')
-            .get(this.controller.getEventsByContactId)
             .post(this.controller.createEvent)
+        ;
+
+        this.router
+            .route('/:id')
+            .get(this.controller.getEventsByContactId)
         ;
     };
 }

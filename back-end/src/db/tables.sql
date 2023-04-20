@@ -29,3 +29,7 @@ INSERT INTO accounts (name, email, password) VALUES ('Stas', 'stas@gmail.com', '
 INSERT INTO contacts (first_name, last_name, email, phone_number, account_id) VALUES ('Joe', 'Tripiany', 'joe@gmail.com', '0981231212', 1);
 INSERT INTO events (title, description, start_date, end_date, account_id, contact_id) 
 	VALUES ('Event#1', 'Description for event#1', '2023-04-12T13:36:19.923Z', '2023-04-12T14:36:19.923Z', 1);
+SELECT * FROM events
+    WHERE start_date <= '2023-04-19T11:52:51.710Z'
+    AND end_date >= '2023-04-19T12:52:51.710Z'
+;

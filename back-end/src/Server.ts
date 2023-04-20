@@ -1,6 +1,7 @@
 import express, { Application, Request, Response } from "express";
 import AccountsRouter from "@routes/accounts";
 import ContactsRouter from "@routes/contacts";
+import EventsRouter from '@routes/events';
 import AccountModel from "@models/Account";
 import Auth from "@middlewares/auth";
 
@@ -41,7 +42,8 @@ export default class Server {
 
     private routes(): void {
         const accountsRouter = new AccountsRouter();
-        const contactRouter = new ContactsRouter();
+        const contactsRouter = new ContactsRouter();
+        const eventsRouter = new EventsRouter();
 
         this.app.get('/', Auth.isLoggedIn, (req: Request, res: Response) => {
             res.send('home page');
@@ -55,7 +57,8 @@ export default class Server {
         //         }
         //     })
         // });
-        this.app.use('/api/v1/contacts', contactRouter.router);
+        this.app.use('/api/v1/contacts', contactsRouter.router);
+        this.app.use('/api/v1/events', eventsRouter.router);
     };
 
     private passportConfig(): void {

@@ -1,8 +1,9 @@
 import axios from "axios";
 import { useContext } from "react";
 import { AppContext } from "../App";
+import { withAuth } from "../HOC/withAuth";
 
-export const Home = () => {
+export const Home = withAuth(() => {
     const { user } = useContext(AppContext);
     const url: string = process.env.REACT_APP_BACK_END_BASE_URL || '';
 
@@ -30,4 +31,4 @@ export const Home = () => {
             <button onClick={handleGetPage}>Get Page info</button>
         </>
     );
-}
+});

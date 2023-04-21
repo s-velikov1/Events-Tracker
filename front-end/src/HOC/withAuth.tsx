@@ -9,7 +9,7 @@ export const withAuth = (Component: ComponentType) => {
         const navigate = useNavigate();
 
         useEffect(() => {
-            if (!isAuthenticated) {
+            if (isAuthenticated) { // TODO: turn on auth check
                 navigate('/login');
             }
         }, [isAuthenticated, navigate]);

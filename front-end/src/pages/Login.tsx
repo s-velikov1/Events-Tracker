@@ -38,10 +38,12 @@ export const Login = () => {
     return (
         <>
             <h1>Login page</h1>
-            <input type="text" placeholder="Email" onChange={(e) => { setEmail(e.target.value) }} />
-            <input type="password" placeholder="password" onChange={(e) => { setPassword(e.target.value) }} />
-            <button onClick={login}>Login</button>
-            <button onClick={logout}>Logout</button>
+            <form onSubmit={(e) => e.preventDefault()}>
+                <input type="text" placeholder="Email" onChange={(e) => { setEmail(e.target.value) }} />
+                <input type="password" placeholder="password" onChange={(e) => { setPassword(e.target.value) }} />
+                <button onClick={login}>Login</button>
+                <button onClick={logout}>Logout</button>
+            </form>
 
             {JSON.stringify(user) || ''}
         </>
